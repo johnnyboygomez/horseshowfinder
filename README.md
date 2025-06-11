@@ -1,7 +1,8 @@
 # horseshowfinder
 ### Saddle Up! Canadian Horse Shows Heat Map By Discipline
 
-**Video Demo:** _<URL HERE>_  
+**Video Demo:** [https://youtu.be/gtxQ-K2zP90](https://youtu.be/gtxQ-K2zP90) 
+
 **Web App URL:** https://www.stableright.io/horseshowfinder
 
 **Student:** John Dowling  
