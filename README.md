@@ -160,5 +160,5 @@ The heart of the app is the interactive map of Canada, created and controlled by
 
 - [Leaflet](https://unpkg.com/leaflet/dist/leaflet.js) — An open-source JavaScript library for mobile-friendly interactive maps  
 - [MarkerCluster](https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js) — Enhances Leaflet by clustering dense datasets into a clean, usable view  
-- `script.js` — Custom logic for marker rendering, filtering, and popup handling
+- [https://stableright.io/horseshowfinder/horseshowfinder.js](https://stableright.io/horseshowfinder/horseshowfinder.js) — Custom logic for marker rendering, filtering, and popup handling
 
