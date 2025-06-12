@@ -140,25 +140,121 @@ There were two serious problems with the geolocation data: inconsistent nonclema
 ```
 2. Because we only have the city and province without street locations, Nominatim provides the downtown crossroads as the coordinates. For example Wesley Clover Parks is shown in downtown Ottawa. It is actually 26 km west of there! My solution was to get each venue's coordinates on google maps and then update `geocode_cache.json` by hand. This only needs to be done once per venuse, even it the venue has many shows. So what's the point in using a geocoded service if it all has to be changed? It actually is helpful for a few reasons. First it allows the program to run and be debugged and tweaked knowing that the locations are  close to accurate coompared to the size ot the country. Also, geocode_cache.json is a nice neat file to open and simply change long and lat, and nothing else.
 
-## Frontend Files ##
+## Frontend ##
 
-Users access the app via `index.html`.
+Users access the app via **index.html**.
 
-The `<head>` imports the stylesheets:
+The **<head>** imports the **stylesheets**:
 - [Leaflet](https://unpkg.com/leaflet/dist/leaflet.css)
 - [MarkerCluster Default](https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css)
 - [MarkerCluster Layout](https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css)
 - [styles.css](https://stableright.io/horseshowfinder/styles.css)
 
-The `<body>` includes:
-- A `<select>` list that allows users to view all three Olympic disciplines or filter by **Dressage**, **Eventing**, or **Jumping**
-- A **Reset Map** button, which reloads the page and resets the map to show the full country
-
-### Interactive Map ###
-
-The heart of the app is the interactive map of Canada, created and controlled by three scripts:
-
+and these **scripts**:
 - [Leaflet](https://unpkg.com/leaflet/dist/leaflet.js) — An open-source JavaScript library for mobile-friendly interactive maps  
 - [MarkerCluster](https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js) — Enhances Leaflet by clustering dense datasets into a clean, usable view  
 - [https://stableright.io/horseshowfinder/horseshowfinder.js](https://stableright.io/horseshowfinder/horseshowfinder.js) — Custom logic for marker rendering, filtering, and popup handling
+
+#### horseshowfinder.js ####
+1. Defines custom Leaflet marker icons (blue, green, violet, grey) for Jumping, Eventing, Dressage, and a fallback "other" category.
+
+These icons use a github user content image URL for marker visuals and include standard Leaflet shadow images, [https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png](https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png)
+
+2. Responsive Map Configuration
+Checks the screen width to detect mobile devices (<= 500px).
+
+Initializes the map with an integer zoom level (3 for mobile, 4 for desktop).
+
+Then immediately sets a more precise zoom level using map.setZoom() (e.g., 3.5 or 4.6) to allow fractional zoom since Leaflet doesn’t support it directly in the initial call.
+
+```
+const isMobile = window.innerWidth <= 768;
+
+const map = L.map("map", {
+  center: [50.0, -90.0],
+  zoom: isMobile ? 3 : 4, // must be integer here
+  zoomSnap: 0.1,
+  maxZoom: 11,
+});
+
+// Apply fractional zoom after initialization
+if (isMobile) {
+  map.setZoom(3.5);
+} else {
+  map.setZoom(4.6); // Or whatever default you prefer for desktop
+}
+
+```
+
+3. Tile Layer
+Adds OpenStreetMap tiles to the map as the visual base layer.
+```
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+```
+
+4. Fetch JSON Data
+Loads heatmap.json, which contains an array of show/event objects with properties like latitude, longitude, name, discipline, dates, and result status.
+
+5. MarkerCluster Setup
+Initializes a MarkerClusterGroup to automatically group close-together markers and adds a clusterclick handler so when a cluster is clicked, the map zooms to fit its bounds smoothly.
+```
+fetch("heatmap.json")
+    .then((response) => response.json())
+    .then((data) => {
+      const markerGroup = L.markerClusterGroup({
+        zoomToBoundsOnClick: false,
+      });
+
+      markerGroup.on("clusterclick", (a) => {
+        map.fitBounds(a.layer.getBounds(), {
+          padding: [0, 70],
+          maxZoom: 13,
+          animate: true,
+        });
+      });
+```
+
+6. Marker Creation
+- For each event in the dataset:
+
+- Determines the correct icon based on the discipline.
+
+- Creates a marker at the latitude/longitude coordinates.
+
+- Builds a popup HTML string using event data:
+
+- Show name and venue.
+
+- Dates (with special handling for cancelled events).
+
+- Discipline and competition level.
+
+- Result status and link (if available).
+
+- Competition website (if available, prepends `https://` if needed).
+
+- Attaches the popup and discipline to the marker.
+
+- Adds the marker to the cluster group and stores it in an `allMarkers` array.
+
+- Once all markers are created and added to the cluster group, the entire group is added to the map.
+
+7. Checkbox UI Filtering
+- Selects all .discipline-checkbox inputs.
+
+- Adds an event listener to each checkbox.
+
+- When checkboxes are changed:
+
+- The script filters the allMarkers array to include only those matching the selected disciplines.
+
+- Clears the cluster group and re-adds only the filtered markers.
+
+```
+const checkboxes = document.querySelectorAll(".discipline-checkbox");
+
+```
+8. Fix Map Layout
+After a short delay (100ms), it calls map.invalidateSize() to fix any rendering issues that can occur after programmatically adjusting zoom or adding many markers.
+
 
