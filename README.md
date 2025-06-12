@@ -7,7 +7,7 @@
 
 **Student:** John Dowling  
 **edX:** JD_2407_MPGF  
-**GitHub:** [johnnyboygomez](https://github.com/johnnyboygomez) (`code50/36233186`)
+**GitHub:** [johnnyboygomez/horseshowfinder](https://github.com/johnnyboygomez/horseshowfinder)
 
 ![Canadian Horse Show Heat Map](https://stableright.io/horseshowfinder/horseshowfinder.png)
 
