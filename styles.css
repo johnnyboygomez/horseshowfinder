@@ -1,0 +1,153 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+#filter {
+  position: fixed;
+  z-index: 1000;
+  padding: 10px;
+  margin-left: 100px;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  display: flex;
+  flex-wrap: wrap; /* optional if you want wrapping instead of overflow */
+  xxgap: 4px;
+  align-items: center;
+  xxbackground-color: #333; /* Optional background for better visibility */
+}
+
+#filter label,
+#reset {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.discipline-jumping,
+.discipline-eventing,
+.discipline-dressage {
+  color: white;
+  padding: 5px;
+  margin: 0;
+  cursor: pointer;
+  font-size: 0.7rem;
+  border-radius: 0;
+}
+
+.discipline-jumping {
+  background-color: #0074FF; /* blue */
+  border-radius: 4px 0 0 4px;
+}
+
+.discipline-eventing {
+  background-color: #28A745; /* green */
+}
+
+.discipline-dressage {
+  background-color: #8A2BE2; /* violet */
+}
+
+#reset {
+  background-color: darkslategrey;
+  color: white;
+  border-radius: 0 4px 4px 0;
+  padding: 5px 8px;
+  font-size: 0.7rem;
+    cursor: pointer;
+
+}
+
+/* Optional: Shrink font size and padding on smaller screens */
+@media (max-width: 700px) {
+  #filter {
+    font-size: 0.65rem;
+    padding: 8px;
+    margin-right: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  #filter label,
+  #reset {
+    padding: 4px;
+    font-size: 0.65rem;
+  }
+}
+
+footer {
+	font-size: .8rem;
+	color: white;
+	background-color: darkslategrey;
+	z-index: 1000;
+	height: 300px;
+	text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    
+}
+
+footer a {
+	color: red;
+}
+
+#footer {
+	padding: 52px;
+	border-style: solid;
+}
+
+#map {
+  height: calc(100vh - 90px); /* leave space for header */
+  width: 100%;
+}
+
+#disciplineSelect {
+	cursor: pointer;
+	font-size: 1rem;
+	
+    }
+
+.page-header {
+  background-color: #8B0000; /* Dark red */
+  color: white;
+  padding: 1rem .6rem;
+  text-align: center;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Adjust for small screens */
+@media (max-width: 700px) {
+  .page-header {
+    background-color: darkred;
+
+    padding: 0.6rem 0.4rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.1rem;
+  }
+}
+
+.green {
+	color:darkgreen !important;
+}
+
+.amber {
+	color: goldenrod;
+}
+
+.none {
+	color: orange;
+}
+
+
+#website {
+	color: dimgray;
+	opacity: 30
+}
+

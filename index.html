@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Canada Horse Show Map by Discipline</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-header">
+      <h1>Mount Up! Canada Horse Show Map By Discipline</h1>
+    </div>
+
+    <div id="filter">
+      <label class="discipline-jumping">
+        <input
+          type="checkbox"
+          class="discipline-checkbox"
+          value="jumping"
+          checked
+        />
+        Jumping
+      </label>
+      <label class="discipline-eventing">
+        <input
+          type="checkbox"
+          class="discipline-checkbox"
+          value="eventing"
+          checked
+        />
+        Eventing
+      </label>
+      <label class="discipline-dressage">
+        <input
+          type="checkbox"
+          class="discipline-checkbox"
+          value="dressage"
+          checked
+        />
+        Dressage
+      </label>
+
+      <button onclick="location.reload()" id="reset">Reset Map</button>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script src="horseshowfinder.js"></script>
+    <footer>
+      <div id="footer">
+        © 2025 John Dowling -
+        <a href="https://stableright.io">Stableright Web Services</a>
+      </div>
+    </footer>
+  </body>
+</html>
