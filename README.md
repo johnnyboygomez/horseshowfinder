@@ -17,8 +17,8 @@ Show data is scraped from the Equine Canada website, cached locally, and updated
 
 Built using **HTML**, **JavaScript**, **Leaflet.js**, and **Leaflet.markercluster**, the app reads data from `heatmap.json` and organizes it visually for clarity and usability.
 
-**What is the point?**<br>
-This app attempts to fill a gap in the usefullness of an existing public API by making it very easy to find information quickly via an interactive map of the country. 
+**Purpose:**<br>
+This app attempts to fill a gap in the usefulness of an existing public API by making it very easy to find information quickly via an interactive map of the country. 
 
 
 ---
@@ -75,7 +75,7 @@ The key file is `heat.py`. This is a python script that is run from the command 
 3. For each horse show, use `geocode_locations()` to:
    1. First check `geocode_cache.json`:
       - If location exists, reuse existing coordinates (longitude, latitude)
-      - If not, geocode it (find loordinates using Nominatim from OpenStreetMap) and add to the cache
+      - If not, geocode it (find coordinates using Nominatim from OpenStreetMap) and add to the cache
    3. Fetch additional show info via API with `get_show_info()`
    4. Append show and location details to `heatmap.json`
 <br>
@@ -126,11 +126,11 @@ StartDate: "/Date(1738299600000-0500)/",
 Website: "www.sprucemeadows.com"
 }
 ```
-Note that some items listed as null in the first search (such as contact info) are actually list in the detailed show info.
+Some fields (like contact info) are null in the first search but appear in the detailed event data retrieved via GetShowInfo.
 
 #### Cleaning Data ####
 There were two serious problems with the geolocation data: inconsistent nonclemature of placenames and venues, and incorrect locations of the venues. 
-1. Errors occurred in the json file from the API. City names were missplelled, venue and city names were transposed, extra commas showed up, etc. Since I have no control over the API I decided to create a list of all corrections cse by case. I created a dictionary, `corrected_locations`, that could be used to correct erroneous place names and thus be presented properly on the map. HEre is a snippet:
+1. Errors occurred in the json file from the API. City names were misspelled, venue and city names were transposed, extra commas showed up, etc. Since I have no control over the API I decided to create a list of all corrections cse by case. I created a dictionary, `corrected_locations`, that could be used to correct erroneous place names and thus be presented properly on the map. Here is a snippet:
 ```
 "RED RIVER EXHIBITION PARK, WINNIPEG, MB , MB": "RED RIVER EXHIBITION PARK, Winnipeg, MB",
     "LAKESIDE, FOSHAY SOUTH EVENTING, NB": "FOSHAY SOUTH EVENTING, Lakeside, NB",
@@ -138,7 +138,7 @@ There were two serious problems with the geolocation data: inconsistent nonclema
     "EQUESTRAN FARM, VAUDREIL, QC": "EQUESTRAN FARM, Vaudreuil, QC",
     "WESLEY CLOVER PARKS , ON": "WESLEY CLOVER PARKS, Ottawa, ON",
 ```
-2. Because we only have the city and province without street locations, Nominatim provides the downtown crossroads as the coordinates. For example Wesley Clover Parks is shown in downtown Ottawa. It is actually 26 km west of there! My solution was to get each venue's coordinates on google maps and then update `geocode_cache.json` by hand. This only needs to be done once per venuse, even it the venue has many shows. So what's the point in using a geocoded service if it all has to be changed? It actually is helpful for a few reasons. First it allows the program to run and be debugged and tweaked knowing that the locations are  close to accurate coompared to the size ot the country. Also, geocode_cache.json is a nice neat file to open and simply change long and lat, and nothing else.
+2. Because we only have the city and province without street locations, Nominatim provides the downtown crossroads as the coordinates. For example Wesley Clover Parks is shown in downtown Ottawa. It is actually 26 km west of there! My solution was to get each venue's coordinates on google maps and then update `geocode_cache.json` by hand. This only needs to be done once per venues, even it the venue has many shows. So what's the point in using a geocoded service if it all has to be changed? It actually is helpful for a few reasons. First it allows the program to run and be debugged and tweaked knowing that the locations are  close to accurate compared to the size ot the country. Also, geocode_cache.json is a nice neat file to open and simply change long and lat, and nothing else.
 
 ## Frontend ##
 
