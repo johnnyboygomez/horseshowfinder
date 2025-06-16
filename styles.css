@@ -119,6 +119,13 @@ footer a {
   font-size: 1.4rem;
   font-family: 'Segoe UI', sans-serif;
 }
+#tagline {
+  color: white;
+  font-size: 1rem;
+  margin-top: 0;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0
+}
 
 /* Adjust for small screens */
 @media (max-width: 700px) {
@@ -130,6 +137,9 @@ footer a {
 
   .page-header h1 {
     font-size: 1.1rem;
+  }
+  #tagline {
+  font-size: .75rem;
   }
 }
 
@@ -151,13 +161,3 @@ footer a {
 	opacity: 30
 }
 
-#tagline {
-  font-size: 1.25rem;
-  color: #555;
-  margin-top: 0;
-}
-#tagline {
-  font-size: 1.25rem;
-  color: #555;
-  margin-top: 0;
-}
