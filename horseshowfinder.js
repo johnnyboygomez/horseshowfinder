@@ -42,21 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }),
   };
 
-  const isMobile = window.innerWidth <= 500;
-
   const map = L.map("map", {
     center: [50.0, -90.0],
-    zoom: isMobile ? 3 : 4, // must be integer here
+    zoom: 4,
     zoomSnap: 0.1,
     maxZoom: 11,
   });
 
-  // Apply fractional zoom after initialization
-  if (isMobile) {
-    map.setZoom(3.5);
-  } else {
-    map.setZoom(4.6); // Or whatever default you prefer for desktop
-  }
+  map.setZoom(4.6); // set fractional zoom after init
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
