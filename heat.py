@@ -5,6 +5,10 @@ from datetime import datetime
 from geopy.geocoders import Nominatim
 import logging
 import re
+import unicodedata
+def normalize_loc_key(s):
+    return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode().strip().title()
+
 
 # Configure logging
 logging.basicConfig(
@@ -49,15 +53,24 @@ location_corrections = {
     "ANGELSTONE TOURNAMENTS, ROCKWOOD, ON , ON": "ANGELSTONE TOURNAMENTS, ROCKWOOD, ON",
     "QUANTUM FARM, KARS, ON": "QUANTUM FARM, 6630 Third Line Rd Kars, ON",
     "SUTTON, QUEBEC, QC": "Les Écuries Avalon, Sutton, QC",
+    "ILDERTON AGRICULTURAL SOCIETY, ON": "ILDERTON AGRICULTURAL SOCIETY, CLINTON, ON",
+    "RCRA, CEDAR VALLEY , ON": "Royal Canadian Riding Academy, CEDAR VALLEY , ON"
 
 }
 
 # Load geocode cache if it exists
+def normalize_cache_keys(cache):
+    return {
+        normalize_loc_key(k): v for k, v in cache.items()
+    }
+# Load and normalize cache
 try:
     with open("geocode_cache.json", "r") as f:
-        geocode_cache = json.load(f)
+        raw_cache = json.load(f)
+        geocode_cache = normalize_cache_keys(raw_cache)
 except FileNotFoundError:
     geocode_cache = {}
+    
 
 def get_all_shows(year):
     url = f"https://events.equestrian.ca/CreateTokenWCF.svc/GetShowsList?&province=&Discipline=&year={year}&type=&results="
@@ -74,7 +87,7 @@ def extract_location_details(shows):
     for show in shows:
         discipline = str(show.get("Discipline", "")).strip().lower()
         if discipline not in allowed_disciplines:
-            logging.info(f"Skipping show with discipline '{discipline}'")
+            ###logging.info(f"Skipping show with discipline '{discipline}'")
             continue
 
         raw_loc = str(show.get("Location", "")).strip()
@@ -118,7 +131,10 @@ def geocode_locations(event_data, geolocator, geocode_cache, location_correction
     geocoded = []
     print("Geocoding locations")
     for event in event_data:
-        loc_key = f"{event['city']}, {event['province']}"
+        raw_loc_key = f"{event['city']}, {event['province']}"
+        loc_key = normalize_loc_key(raw_loc_key)
+        print(loc_key)
+
         venue = event.get("venue", "")
 
         # Apply corrections
@@ -131,9 +147,10 @@ def geocode_locations(event_data, geolocator, geocode_cache, location_correction
         # Retrieve from cache or geocode
         if loc_key in geocode_cache:
             geo = geocode_cache[loc_key]
+
         else:
             try:
-                ##logging.info(f"Geocoding: {loc_key}")
+                print(f"Geocoding: {loc_key}")
                 result = geolocator.geocode(loc_key)
                 time.sleep(1)
                 if result:
@@ -151,7 +168,7 @@ def geocode_locations(event_data, geolocator, geocode_cache, location_correction
 
         # Save enriched event
         enriched = {
-            "city_province": loc_key,
+            "city_province":  f"{event['city']}, {event['province']}",
             "venue": venue,
             "lat": geo["lat"],
             "lng": geo["lng"],
